@@ -22,6 +22,26 @@ SDL_Surface *winSurface = nullptr;
 SDL_Surface *chip8Surface = nullptr;
 uint8_t display[SCREEN_WIDTH * SCREEN_HEIGHT] = {};
 
+void draw()
+{
+    SDL_FillRect(chip8Surface, nullptr,
+                 SDL_MapRGB(chip8Surface->format, 0, 0, 0));
+    Uint32 white = SDL_MapRGB(chip8Surface->format, 255, 255, 255);
+    for (int y = 0; y < SCREEN_HEIGHT; y++)
+    {
+        for (int x = 0; x < SCREEN_WIDTH; x++)
+        {
+            if (display[y * SCREEN_WIDTH + x])
+            {
+                SDL_Rect pixel = {x, y, 1, 1};
+                SDL_FillRect(chip8Surface, &pixel, white);
+            }
+        }
+    }
+    SDL_Rect destRect = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+    SDL_BlitScaled(chip8Surface, nullptr, winSurface, &destRect);
+}
+
 struct Registers {
     uint PC = 0x200;
     uint16_t I = 0;
@@ -62,23 +82,13 @@ class Chip8 {
             }
 };
 
-void draw() {
-    SDL_FillRect(chip8Surface, nullptr,
-        SDL_MapRGB(chip8Surface->format, 0, 0, 0));
-}
-
 bool loop();
 
 int main() {
     SDL_Init(SDL_INIT_EVERYTHING);
-
-    window = SDL_CreateWindow("Chip-8",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Chip-8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     winSurface = SDL_GetWindowSurface(window);
-
-    chip8Surface = SDL_CreateRGBSurface(0,
-        SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
+    chip8Surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
 
     while ( loop() ) {
     }
@@ -99,6 +109,8 @@ bool loop() {
                 break;
         }
     }
+
+    draw();
 
     const Uint64 end = SDL_GetPerformanceCounter();
     const float elapsedMS = (end - start) /
