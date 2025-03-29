@@ -14,9 +14,10 @@
 #define GET_NN(opcode) (opcode & 0x00FF)
 #define GET_NNN(opcode) (opcode & 0x0FFF)
 
+#define IPS 700
 #define SCREEN_WIDTH 64
 #define SCREEN_HEIGHT 32
-#define SCALE_FACTOR 8
+#define SCALE_FACTOR 16
 #define WINDOW_WIDTH (SCREEN_WIDTH * SCALE_FACTOR)
 #define WINDOW_HEIGHT (SCREEN_HEIGHT * SCALE_FACTOR)
 
@@ -177,7 +178,7 @@ bool loop() {
                 break;
         }
     }
-    for (int i=0; i<12; i++) {
+    for (int i=0; i<ceil(IPS/60); i++) {
         chip.fetch();
         chip.decode();
     }
