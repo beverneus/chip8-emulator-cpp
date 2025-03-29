@@ -111,7 +111,7 @@ class Chip8 {
                         *VF = 0;
                         for (int y = 0; y < GET_N(opcode); y++) {
                             for (int x = 0; x < 8; x++) {
-                                if (*(sprite + y) & (0b1 << 7-x)) {
+                                if (*(sprite + y) & (0b1 << (7-x))) { // Go over all 8 bits in the byte, from left to right
                                     int draw_x = sprite_x + x;
                                     int draw_y = sprite_y + y;
                                     if (draw_x < SCREEN_WIDTH && draw_y < SCREEN_HEIGHT) {
