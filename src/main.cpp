@@ -70,7 +70,7 @@ class Chip8 {
         public:
             Registers regs;
             Memory memory;
-            std::stack<int> stack;
+            std::stack<uint16_t> stack;
 
             uint16_t opcode = 0x0;
 
