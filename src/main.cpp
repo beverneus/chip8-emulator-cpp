@@ -110,9 +110,9 @@ class Chip8 {
         }
 
         void fetch() {
-            const uint8_t a = this->memory.read(this->regs.PC);
-            const uint8_t b = this->memory.read(this->regs.PC + 1);
-            this->regs.PC += 2;
+            const uint8_t a = memory.read(regs.PC);
+            const uint8_t b = memory.read(regs.PC + 1);
+            regs.PC += 2;
             opcode = a << 8 | b;
         }
 
@@ -127,22 +127,22 @@ class Chip8 {
                     }
                     break;
                 case 0x1:
-                    this->regs.PC = GET_NNN(opcode);
+                    regs.PC = GET_NNN(opcode);
                     break;
                 case 0x6:
-                    this->regs.V[GET_X(opcode)] = GET_NN(opcode);
+                    regs.V[GET_X(opcode)] = GET_NN(opcode);
                     break;
                 case 0x7:
-                    this->regs.V[GET_X(opcode)] += GET_NN(opcode);
+                    regs.V[GET_X(opcode)] += GET_NN(opcode);
                     break;
                 case 0xA:
-                    this->regs.I = GET_NNN(opcode);
+                    regs.I = GET_NNN(opcode);
                     break;
                 case 0xD:
-                    uint8_t sprite_x = this->regs.V[GET_X(opcode)] % SCREEN_WIDTH;
-                    uint8_t sprite_y = this->regs.V[GET_Y(opcode)] % SCREEN_HEIGHT;
-                    uint8_t* sprite = &this->memory.data[this->regs.I];
-                    uint8_t* VF = &this->regs.V[0xF];
+                    uint8_t sprite_x = regs.V[GET_X(opcode)] % SCREEN_WIDTH;
+                    uint8_t sprite_y = regs.V[GET_Y(opcode)] % SCREEN_HEIGHT;
+                    uint8_t* sprite = &memory.data[regs.I];
+                    uint8_t* VF = &regs.V[0xF];
                     *VF = 0;
                     for (int y = 0; y < GET_N(opcode); y++) {
                         for (int x = 0; x < 8; x++) {
