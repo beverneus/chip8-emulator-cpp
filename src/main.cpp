@@ -98,7 +98,7 @@ class Chip8 {
             uint8_t i = 0;
             while (!rom.eof()) {
                 rom.read(&x, 1);
-                chip.memory.data[0x200 + i] = x;
+                memory.data[0x200 + i] = x;
                 i++;
             }
             rom.close();
