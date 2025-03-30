@@ -49,8 +49,22 @@ struct Registers {
     uint16_t PC = 0x200;
     uint16_t I = 0;
     uint8_t V[16] = {};
-    uint8_t delayTimer = 0;
-    uint8_t soundTimer = 0;
+};
+
+struct Timers {
+    uint8_t delay = 0;
+    uint8_t sound = 0;
+
+    void update() {
+        if (delay) {
+            delay -= 1;
+        }
+        if (sound) {
+            sound -= 1;
+            std::cout << "BEEP" << '\n';
+        }
+    }
+
 };
 
 struct Memory {
@@ -67,6 +81,7 @@ struct Memory {
 
 class Chip8 {
             Registers regs;
+        Timers timers;
             Memory memory;
             std::stack<uint16_t> stack;
 
@@ -88,6 +103,10 @@ class Chip8 {
                 }
                 rom.close();
             }
+
+        void updateTimers() {
+            timers.update();
+        }
 
             void fetch() {
                 const uint8_t a = this->memory.read(this->regs.PC);
@@ -182,6 +201,8 @@ bool loop() {
         chip.fetch();
         chip.decode();
     }
+
+    chip.updateTimers();
 
     draw();
 
