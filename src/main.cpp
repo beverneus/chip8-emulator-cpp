@@ -1,6 +1,6 @@
 // Copyright 2025 Lars De Volder
 #include <math.h>
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <cstdint>
 #include <cstring>
 #include <iostream>
@@ -26,11 +26,14 @@ SDL_Surface *winSurface = nullptr;
 SDL_Surface *chip8Surface = nullptr;
 uint8_t display[SCREEN_WIDTH * SCREEN_HEIGHT] = {};
 
-void draw()
-{
-    SDL_FillRect(chip8Surface, nullptr,
-                 SDL_MapRGB(chip8Surface->format, 0, 0, 0));
-    Uint32 white = SDL_MapRGB(chip8Surface->format, 255, 255, 255);
+void draw() {
+    const SDL_PixelFormatDetails *format = SDL_GetPixelFormatDetails(chip8Surface->format);
+
+    const Uint32 BLACK = SDL_MapRGB(format, nullptr, 0, 0, 0);
+    const Uint32 WHITE = SDL_MapRGB(format, nullptr, 255, 255, 255);
+
+    SDL_FillSurfaceRect(chip8Surface, nullptr, BLACK);
+    
     for (int y = 0; y < SCREEN_HEIGHT; y++)
     {
         for (int x = 0; x < SCREEN_WIDTH; x++)
@@ -38,11 +41,11 @@ void draw()
             if (display[y * SCREEN_WIDTH + x])
             {
                 SDL_Rect pixel = {x, y, 1, 1};
-                SDL_FillRect(chip8Surface, &pixel, white);
+                SDL_FillSurfaceRect(chip8Surface, &pixel, WHITE);
             }
         }
     }
-    SDL_BlitScaled(chip8Surface, nullptr, winSurface, nullptr);
+    SDL_BlitSurfaceScaled(chip8Surface, nullptr, winSurface, nullptr, SDL_SCALEMODE_NEAREST);
 }
 
 struct Registers {
@@ -181,10 +184,10 @@ int main(int, char *argv[]) {
     chip.writeRom(argv[1]);
 
     //DISPLAY
-    SDL_Init(SDL_INIT_EVERYTHING);
-    window = SDL_CreateWindow("Chip-8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    SDL_Init(SDL_INIT_VIDEO);
+    window = SDL_CreateWindow("Chip-8", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_INPUT_FOCUS);
     winSurface = SDL_GetWindowSurface(window);
-    chip8Surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
+    chip8Surface = SDL_CreateSurface(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_PIXELFORMAT_ARGB32);
 
     while ( loop() ) {
     }
@@ -198,7 +201,7 @@ bool loop() {
     SDL_Event evt;
     while (SDL_PollEvent(&evt) != 0) {
         switch (evt.type) {
-            case SDL_QUIT:
+            case SDL_EVENT_QUIT:
                 return false;
             default:
                 break;

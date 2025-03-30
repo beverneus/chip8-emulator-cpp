@@ -3,10 +3,11 @@ project(chip8)
 
 set(CMAKE_CXX_STANDARD 23)
 
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
-
 add_executable(chip8 src/main.cpp)
-target_link_libraries(chip8 ${SDL2_LIBRARIES})
+
+find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3)
+target_link_libraries(chip8 PRIVATE SDL3::SDL3)
+include_directories(${SDL3_INCLUDE_DIRS})
+
 
 target_compile_options(chip8 PRIVATE -Werror -Wall -Wextra)
