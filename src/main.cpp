@@ -73,17 +73,15 @@ class Chip8 {
         uint16_t opcode = 0x0;
 
         public:
-            int writeRom(const char path[]) {
+        int writeRom(const char path[]) {
                 std::ifstream rom(path, std::ios::binary);
-                if (rom.fail())
-                {
+            if (rom.fail()) {
                     std::cout << "Failed to read rom" << std::endl;
                     return 1;
                 }
                 char x;
                 uint8_t i = 0;
-                while (!rom.eof())
-                {
+            while (!rom.eof()) {
                     rom.read(&x, 1);
                     chip.memory.data[0x200 + i] = x;
                     i++;
