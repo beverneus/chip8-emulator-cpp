@@ -124,9 +124,17 @@ class Chip8 {
                         case 0xE0:
                             std::memset(display, 0, sizeof(display));
                             break;
+                        case 0xEE:
+                            regs.PC = stack.top();
+                            stack.pop();
+                            break;
                     }
                     break;
                 case 0x1:
+                    regs.PC = GET_NNN(opcode);
+                    break;
+                case 0x2:
+                    stack.push(regs.PC);
                     regs.PC = GET_NNN(opcode);
                     break;
                 case 0x6:
@@ -169,7 +177,6 @@ bool loop();
 Chip8 chip;
 
 int main(int, char *argv[]) {
-
     //ROM
     chip.writeRom(argv[1]);
 
@@ -178,7 +185,6 @@ int main(int, char *argv[]) {
     window = SDL_CreateWindow("Chip-8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     winSurface = SDL_GetWindowSurface(window);
     chip8Surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
-
 
     while ( loop() ) {
     }
