@@ -66,10 +66,11 @@ struct Memory {
 };
 
 class Chip8 {
-        private:
             Registers regs;
             Memory memory;
             std::stack<uint16_t> stack;
+
+        uint16_t opcode = 0x0;
 
         public:
             int writeRom(const char path[]) {
@@ -89,9 +90,6 @@ class Chip8 {
                 }
                 rom.close();
             }
-
-
-            uint16_t opcode = 0x0;
 
             void fetch() {
                 const uint8_t a = this->memory.read(this->regs.PC);
