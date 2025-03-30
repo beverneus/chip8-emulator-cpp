@@ -102,6 +102,7 @@ class Chip8 {
                 i++;
             }
             rom.close();
+            return 0;
         }
 
         void updateTimers() {
