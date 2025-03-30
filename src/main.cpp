@@ -94,10 +94,10 @@ class Chip8 {
                 std::cout << "Failed to read rom" << std::endl;
                 return 1;
             }
-            char x;
-            uint8_t i = 0;
+            uint8_t x;
+            uint16_t i = 0;
             while (!rom.eof()) {
-                rom.read(&x, 1);
+                rom.read(reinterpret_cast<char*>(&x), 1);
                 memory.data[0x200 + i] = x;
                 i++;
             }
