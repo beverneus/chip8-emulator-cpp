@@ -66,11 +66,30 @@ struct Memory {
 };
 
 class Chip8 {
-
-        public:
+        private:
             Registers regs;
             Memory memory;
             std::stack<uint16_t> stack;
+
+        public:
+            int writeRom(const char path[]) {
+                std::ifstream rom(path, std::ios::binary);
+                if (rom.fail())
+                {
+                    std::cout << "Failed to read rom" << std::endl;
+                    return 1;
+                }
+                char x;
+                uint8_t i = 0;
+                while (!rom.eof())
+                {
+                    rom.read(&x, 1);
+                    chip.memory.data[0x200 + i] = x;
+                    i++;
+                }
+                rom.close();
+            }
+
 
             uint16_t opcode = 0x0;
 
@@ -133,24 +152,10 @@ class Chip8 {
 bool loop();
 Chip8 chip;
 
-int main() {
+int main(int, char *argv[]) {
 
     //ROM
-    std::ifstream rom("/home/larsdevolder/code/cpp/chip8/assets/roms/tests/IBM_Logo.ch8", std::ios::binary);
-    if (rom.fail()) {
-        std::cout << "Failed to read rom" << std::endl;
-    }
-    {
-        char x;
-        uint8_t i = 0;
-        while (!rom.eof()) {
-            rom.read(&x, 1);
-            chip.memory.data[0x200+i] = x;
-            i++;
-    }
-    }
-    rom.close();
-
+    chip.writeRom(argv[1]);
 
     //DISPLAY
     SDL_Init(SDL_INIT_EVERYTHING);
