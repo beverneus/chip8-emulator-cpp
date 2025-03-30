@@ -186,6 +186,7 @@ int main(int, char *argv[]) {
     //DISPLAY
     SDL_Init(SDL_INIT_VIDEO);
     window = SDL_CreateWindow("Chip-8", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_INPUT_FOCUS);
+    SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     winSurface = SDL_GetWindowSurface(window);
     chip8Surface = SDL_CreateSurface(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_PIXELFORMAT_ARGB32);
 
