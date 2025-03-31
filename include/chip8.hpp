@@ -6,6 +6,10 @@
 #include <fstream>
 #include <iostream>
 #include <cstring>
+#include <SDL3/SDL.h>
+#include <vector>
+#include <utility>
+#include <algorithm>
 
 #define SCREEN_WIDTH 64
 #define SCREEN_HEIGHT 32
@@ -51,15 +55,28 @@ struct Memory {
 };
 
 
+struct KeyMap {
+    std::vector<std::pair<SDL_Scancode, int>> keys = 
+    {{SDL_SCANCODE_X, 0}, {SDL_SCANCODE_1, 0}, {SDL_SCANCODE_2, 0}, {SDL_SCANCODE_3, 0}, {SDL_SCANCODE_Q, 0},
+    {SDL_SCANCODE_W, 0}, {SDL_SCANCODE_E, 0}, {SDL_SCANCODE_A, 0}, {SDL_SCANCODE_S, 0}, {SDL_SCANCODE_D, 0},
+    {SDL_SCANCODE_Z, 0}, {SDL_SCANCODE_C, 0}, {SDL_SCANCODE_4, 0}, {SDL_SCANCODE_R, 0}, {SDL_SCANCODE_F, 0},
+    {SDL_SCANCODE_V, 0}};
+
+    bool contains(SDL_Scancode scancode);
+    void set(SDL_Scancode scancode, bool value);
+};
+
 class Chip8 {
     Registers regs;
     Timers timers;
     Memory memory;
+    KeyMap keyMap;
     std::stack<uint16_t> stack;
 
     public:
         int writeRom(const char path[]);
         void updateTimers();
+        void keyEvent(SDL_Scancode key, bool keyDown);
         uint16_t fetch();
         void decode(int opcode);
 };

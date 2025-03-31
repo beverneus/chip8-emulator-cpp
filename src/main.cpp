@@ -80,6 +80,12 @@ bool loop() {
         switch (evt.type) {
             case SDL_EVENT_QUIT:
                 return false;
+            case SDL_EVENT_KEY_DOWN:
+                chip.keyEvent(evt.key.scancode, true);
+                break;
+            case SDL_EVENT_KEY_UP:
+                chip.keyEvent(evt.key.scancode, false);
+                break;
             default:
                 break;
         }

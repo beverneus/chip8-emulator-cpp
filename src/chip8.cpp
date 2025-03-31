@@ -13,6 +13,22 @@
 #undef RAND_MAX
 #define RAND_MAX UINT8_MAX
 
+bool KeyMap::contains(SDL_Scancode scancode) {
+    for (const auto& pair : keys) {
+        if (pair.first == scancode) return true;
+    }
+    return false;
+}
+
+void KeyMap::set(SDL_Scancode scancode, bool value) {
+    auto it = std::find_if(keys.begin(), keys.end(), 
+    [scancode](const std::pair<SDL_Scancode, int>& p) { return p.first == scancode; });
+    if (it != keys.end()) {
+        it->second = value;
+    } 
+}
+
+
 int Chip8::writeRom(const char path[]) {
     std::ifstream rom(path, std::ios::binary);
     if (rom.fail()) {
@@ -32,6 +48,12 @@ int Chip8::writeRom(const char path[]) {
 
 void Chip8::updateTimers() {
     timers.update();
+}
+
+void Chip8::keyEvent(SDL_Scancode key, bool keyDown) {
+    if (!keyMap.contains(key))
+        return;
+    keyMap.set(key, keyDown);
 }
 
 uint16_t Chip8::fetch() {
@@ -147,6 +169,7 @@ void Chip8::decode(int opcode) {
             VX = std::rand() & GET_NN(opcode);
             break;
         case 0xD:
+            {
             uint8_t sprite_x = VX % SCREEN_WIDTH;
             uint8_t sprite_y = VY % SCREEN_HEIGHT;
             uint8_t* sprite = &memory.data[regs.I];
@@ -162,11 +185,24 @@ void Chip8::decode(int opcode) {
                                 display[draw_y * SCREEN_WIDTH + draw_x] = 0;
                             } else {
                                 display[draw_y * SCREEN_WIDTH + draw_x] = 1;
+                                }
                             }
                         }
                     }
                 }
             }
             break;
+        case 0xE:
+            switch (GET_NN(opcode)) {
+                case 0x9E:
+                    if (keyMap.keys[VX].second) 
+                        regs.PC += 2;
+                    break;
+                case 0xA1:
+                    if (!keyMap.keys[VX].second)
+                        regs.PC += 2;
+                    break;
+            }
+        break;
     }
 }
