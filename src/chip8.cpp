@@ -124,6 +124,7 @@ void Chip8::decode(int opcode) {
                         VF = 0;
                     }
                     VX = VY - VX;
+                    break;
                 case 0xE:
                     VF = VX & 0b10000000;
                     VX = VX << 1;
