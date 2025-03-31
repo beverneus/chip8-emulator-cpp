@@ -10,6 +10,7 @@
 #define VY (regs.V[GET_Y(opcode)])
 #define VF (regs.V[0xF])
 
+#undef RAND_MAX
 #define RAND_MAX UINT8_MAX
 
 int Chip8::writeRom(const char path[]) {
