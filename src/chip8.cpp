@@ -56,11 +56,31 @@ void Chip8::decode(int opcode) {
             stack.push(regs.PC);
             regs.PC = GET_NNN(opcode);
             break;
+        case 0x3:
+            if (regs.V[GET_X(opcode)] == GET_NN(opcode)) {
+                regs.PC += 2;
+            }
+            break;
+        case 0x4:
+            if (regs.V[GET_X(opcode)] != GET_NN(opcode)) {
+                regs.PC += 2;
+            }
+            break;
+        case 0x5:
+            if (regs.V[GET_X(opcode)] == regs.V[GET_Y(opcode)]) {
+                regs.PC += 2;
+            }
+            break;
         case 0x6:
             regs.V[GET_X(opcode)] = GET_NN(opcode);
             break;
         case 0x7:
             regs.V[GET_X(opcode)] += GET_NN(opcode);
+            break;
+        case 0x9:
+            if (regs.V[GET_X(opcode)] != regs.V[GET_Y(opcode)]) {
+                regs.PC += 2;
+            }
             break;
         case 0xA:
             regs.I = GET_NNN(opcode);
