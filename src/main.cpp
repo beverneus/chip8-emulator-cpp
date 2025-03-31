@@ -27,10 +27,8 @@ SDL_Surface *chip8Surface = nullptr;
 uint8_t display[SCREEN_WIDTH * SCREEN_HEIGHT] = {};
 
 void draw() {
-    const SDL_PixelFormatDetails *format = SDL_GetPixelFormatDetails(chip8Surface->format);
-
-    const Uint32 BLACK = SDL_MapRGB(format, nullptr, 0, 0, 0);
-    const Uint32 WHITE = SDL_MapRGB(format, nullptr, 255, 255, 255);
+    const Uint32 BLACK = SDL_MapSurfaceRGB(chip8Surface, 0, 0, 0);
+    const Uint32 WHITE = SDL_MapSurfaceRGB(chip8Surface, 255, 255, 255);
 
     SDL_FillSurfaceRect(chip8Surface, nullptr, BLACK);
     
