@@ -12,15 +12,13 @@
 
 extern uint8_t display[SCREEN_WIDTH * SCREEN_HEIGHT]; // Declare it globally
 
-struct Registers
-{
+struct Registers {
     uint16_t PC = 0x200;
     uint16_t I = 0;
     uint8_t V[16] = {};
 };
 
-struct Timers
-{
+struct Timers {
     uint8_t delay = 0;
     uint8_t sound = 0;
 
@@ -38,8 +36,7 @@ struct Timers
     }
 };
 
-struct Memory
-{
+struct Memory {
     uint8_t data[4096] = {};
 
     [[nodiscard]] uint8_t read(const uint16_t address) const
