@@ -10,6 +10,8 @@
 #define VY (regs.V[GET_Y(opcode)])
 #define VF (regs.V[0xF])
 
+#define RAND_MAX UINT8_MAX
+
 int Chip8::writeRom(const char path[]) {
     std::ifstream rom(path, std::ios::binary);
     if (rom.fail()) {
@@ -138,6 +140,9 @@ void Chip8::decode(int opcode) {
             break;
         case 0xB:
             regs.PC = GET_NNN(opcode) + VX;
+            break;
+        case 0xC:
+            VX = std::rand() & GET_NN(opcode);
             break;
         case 0xD:
             uint8_t sprite_x = VX % SCREEN_WIDTH;

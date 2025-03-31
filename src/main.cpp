@@ -3,6 +3,7 @@
 #include <SDL3/SDL.h>
 #include <cstdint>
 #include <cstring>
+#include <ctime>
 #include <iostream>
 #include <stack>
 #include <iostream>
@@ -61,6 +62,9 @@ int main(int, char *argv[]) {
     SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     winSurface = SDL_GetWindowSurface(window);
     chip8Surface = SDL_CreateSurface(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_PIXELFORMAT_ARGB32);
+
+    // seed random number generator
+    std::srand(std::time(0));
 
     while ( loop() ) {
     }
