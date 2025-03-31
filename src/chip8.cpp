@@ -81,6 +81,52 @@ void Chip8::decode(int opcode) {
         case 0x7:
             VX += GET_NN(opcode);
             break;
+        case 0x8:
+            switch (GET_N(opcode)) {
+                case 0x0:
+                    VX = VY;
+                    break;
+                case 0x1:
+                    VX |= VY;
+                    break;
+                case 0x2:
+                    VX &= VY;
+                    break;
+                case 0x3:
+                    VX ^= VY;
+                    break;
+                case 0x4:
+                    if (VX > UINT8_MAX - VY) {
+                        VF = 1;
+                    } else {
+                        VF = 0;
+                    }
+                    VX += VY;
+                    break;
+                case 0x5:
+                    if (VX > VY) {
+                        VF = 1;
+                    } else {
+                        VF = 0;
+                    }
+                    VX -= VY;
+                    break;
+                case 0x6:
+                    VF = VX & 0b1;
+                    VX = VX >> 1;
+                    break;
+                case 0x7:
+                    if (VY > VX) {
+                        VF = 1;
+                    } else {
+                        VF = 0;
+                    }
+                    VX = VY - VX;
+                case 0xE:
+                    VF = VX & 0b10000000;
+                    VX = VX << 1;
+                    break;
+            }
             break;
         case 0x9:
             if (VX != VY) {
