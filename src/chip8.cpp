@@ -6,6 +6,10 @@
 #define GET_NN(opcode) (opcode & 0x00FF)
 #define GET_NNN(opcode) (opcode & 0x0FFF)
 
+#define VX (regs.V[GET_X(opcode)])
+#define VY (regs.V[GET_Y(opcode)])
+#define VF (regs.V[0xF])
+
 int Chip8::writeRom(const char path[]) {
     std::ifstream rom(path, std::ios::binary);
     if (rom.fail()) {
@@ -57,28 +61,29 @@ void Chip8::decode(int opcode) {
             regs.PC = GET_NNN(opcode);
             break;
         case 0x3:
-            if (regs.V[GET_X(opcode)] == GET_NN(opcode)) {
+            if (VX == GET_NN(opcode)) {
                 regs.PC += 2;
             }
             break;
         case 0x4:
-            if (regs.V[GET_X(opcode)] != GET_NN(opcode)) {
+            if (VX != GET_NN(opcode)) {
                 regs.PC += 2;
             }
             break;
         case 0x5:
-            if (regs.V[GET_X(opcode)] == regs.V[GET_Y(opcode)]) {
+            if (VX == VY) {
                 regs.PC += 2;
             }
             break;
         case 0x6:
-            regs.V[GET_X(opcode)] = GET_NN(opcode);
+            VX = GET_NN(opcode);
             break;
         case 0x7:
-            regs.V[GET_X(opcode)] += GET_NN(opcode);
+            VX += GET_NN(opcode);
+            break;
             break;
         case 0x9:
-            if (regs.V[GET_X(opcode)] != regs.V[GET_Y(opcode)]) {
+            if (VX != VY) {
                 regs.PC += 2;
             }
             break;
@@ -86,11 +91,10 @@ void Chip8::decode(int opcode) {
             regs.I = GET_NNN(opcode);
             break;
         case 0xD:
-            uint8_t sprite_x = regs.V[GET_X(opcode)] % SCREEN_WIDTH;
-            uint8_t sprite_y = regs.V[GET_Y(opcode)] % SCREEN_HEIGHT;
+            uint8_t sprite_x = VX % SCREEN_WIDTH;
+            uint8_t sprite_y = VY % SCREEN_HEIGHT;
             uint8_t* sprite = &memory.data[regs.I];
-            uint8_t* VF = &regs.V[0xF];
-            *VF = 0;
+            VF = 0;
             for (int y = 0; y < GET_N(opcode); y++) {
                 for (int x = 0; x < 8; x++) {
                     if (*(sprite + y) & (0b1 << (7-x))) { // Go over all 8 bits in the byte, from left to right
@@ -98,7 +102,7 @@ void Chip8::decode(int opcode) {
                         int draw_y = sprite_y + y;
                         if (draw_x < SCREEN_WIDTH && draw_y < SCREEN_HEIGHT) {
                             if (display[draw_y * SCREEN_WIDTH + draw_x]) {
-                                *VF = 1;
+                                VF = 1;
                                 display[draw_y * SCREEN_WIDTH + draw_x] = 0;
                             } else {
                                 display[draw_y * SCREEN_WIDTH + draw_x] = 1;
