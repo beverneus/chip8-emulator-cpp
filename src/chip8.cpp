@@ -136,6 +136,9 @@ void Chip8::decode(int opcode) {
         case 0xA:
             regs.I = GET_NNN(opcode);
             break;
+        case 0xB:
+            regs.PC = GET_NNN(opcode) + VX;
+            break;
         case 0xD:
             uint8_t sprite_x = VX % SCREEN_WIDTH;
             uint8_t sprite_y = VY % SCREEN_HEIGHT;
