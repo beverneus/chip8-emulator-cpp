@@ -11,10 +11,12 @@
 #include <utility>
 #include <algorithm>
 
+#include "audio.hpp"
+
 #define SCREEN_WIDTH 64
 #define SCREEN_HEIGHT 32
 
-extern uint8_t display[SCREEN_WIDTH * SCREEN_HEIGHT]; // Declare it globally
+extern uint8_t display[SCREEN_WIDTH * SCREEN_HEIGHT]; // Already declared in main.cpp
 
 struct Registers {
     uint16_t PC = 0x200;
@@ -25,6 +27,7 @@ struct Registers {
 struct Timers {
     uint8_t delay = 0;
     uint8_t sound = 0;
+    Beep beep;
 
     void update()
     {
@@ -35,7 +38,7 @@ struct Timers {
         if (sound)
         {
             sound--;
-            std::cout << "BEEP" << '\n';
+            beep.play();
         }
     }
 };

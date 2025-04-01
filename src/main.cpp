@@ -9,7 +9,8 @@
 #include <iostream>
 #include <fstream>
 
-#include <chip8.hpp>
+#include "chip8.hpp"
+
 
 #define GET_X(opcode) ((opcode & 0x0F00) >> 8)
 #define GET_Y(opcode) ((opcode & 0x00F0) >> 4)
@@ -28,6 +29,7 @@ SDL_Window *window = nullptr;
 SDL_Surface *winSurface = nullptr;
 SDL_Surface *chip8Surface = nullptr;
 uint8_t display[SCREEN_WIDTH * SCREEN_HEIGHT] = {};
+
 
 void draw() {
     const Uint32 BLACK = SDL_MapSurfaceRGB(chip8Surface, 0, 0, 0);
@@ -53,11 +55,12 @@ bool loop();
 Chip8 chip;
 
 int main(int, char *argv[]) {
+    SDL_Init(SDL_INIT_VIDEO);
+
     //ROM
     chip.writeRom(argv[1]);
 
     //DISPLAY
-    SDL_Init(SDL_INIT_VIDEO);
     window = SDL_CreateWindow("Chip-8", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_INPUT_FOCUS);
     SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     winSurface = SDL_GetWindowSurface(window);

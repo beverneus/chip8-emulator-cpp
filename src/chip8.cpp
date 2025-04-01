@@ -1,4 +1,5 @@
 #include "chip8.hpp"
+#include "audio.hpp"
 
 #define GET_X(opcode) ((opcode & 0x0F00) >> 8)
 #define GET_Y(opcode) ((opcode & 0x00F0) >> 4)
