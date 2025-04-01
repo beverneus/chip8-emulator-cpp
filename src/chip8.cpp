@@ -87,7 +87,7 @@ void Chip8::updateTimers() {
     timers.update();
 }
 
-void Chip8::keyEvent(SDL_Scancode key, bool keyDown) {
+void Chip8::keyEvent(const SDL_Scancode key, const bool keyDown) {
     if (!keyMap.contains(key))
         return;
     keyMap.set(key, keyDown);
