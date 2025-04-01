@@ -264,7 +264,7 @@ void Chip8::decode(const int opcode) {
                         VF = 1;
                     break;
                 case 0x29:{
-                    uint8_t character = VX & 0x0F;
+                    const uint8_t character = VX & 0x0F;
                     regs.I = 0x50 + 5*character;
                     }
                     break;
