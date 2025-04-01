@@ -19,7 +19,7 @@ Beep::Beep() :
 }
 
 void Beep::play() {
-    static const int freq = 800;
+    static constexpr int freq = 800;
     float samples[static_cast<int>(static_cast<float>(spec.freq) / 60)];
     for (size_t i = 0; i < SDL_arraysize(samples); i++) {
         double phase = static_cast<double>(current_sin_sample) * freq / spec.freq;
