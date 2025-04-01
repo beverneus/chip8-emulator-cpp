@@ -57,7 +57,7 @@ int main(int, char *argv[]) {
     chip8Surface = SDL_CreateSurface(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_PIXELFORMAT_ARGB32);
 
     // seed random number generator
-    std::srand(std::time(0));
+    std::srand(std::time(nullptr));
 
     while ( loop() ) {
     }
