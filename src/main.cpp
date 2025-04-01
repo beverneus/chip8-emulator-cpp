@@ -11,13 +11,6 @@
 
 #include "chip8.hpp"
 
-
-#define GET_X(opcode) ((opcode & 0x0F00) >> 8)
-#define GET_Y(opcode) ((opcode & 0x00F0) >> 4)
-#define GET_N(opcode) (opcode & 0x000F)
-#define GET_NN(opcode) (opcode & 0x00FF)
-#define GET_NNN(opcode) (opcode & 0x0FFF)
-
 #define IPS 700 // Number of CHIP8 instructions executed every second (not exact, exact number is 60*ceil(IPS/60))
 #define SCREEN_WIDTH 64
 #define SCREEN_HEIGHT 32
