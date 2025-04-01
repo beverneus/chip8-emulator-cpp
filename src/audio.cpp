@@ -2,7 +2,8 @@
 
 Beep::Beep() : 
     stream(nullptr),
-    current_sin_sample(0)
+    current_sin_sample(0),
+    spec()
     {
     if(!SDL_Init(SDL_INIT_AUDIO)) {
         SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
