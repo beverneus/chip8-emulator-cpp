@@ -101,9 +101,7 @@ uint16_t Chip8::fetch() {
     return opcode;
 }
 
-void Chip8::decode(int opcode) {
-    uint8_t category = (opcode & 0xF000) >> 12;
-    switch (category) {
+void Chip8::decode(const int opcode) {
         case 0x0:
             switch (GET_NN(opcode)) {
                 case 0xE0:
