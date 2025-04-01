@@ -6,6 +6,7 @@
 class Beep {
     SDL_AudioStream *stream;
     SDL_AudioSpec spec;
+    int current_sin_sample;
     public:
         Beep();
         void play();
