@@ -1,7 +1,10 @@
 .vscode/
+.idea/
 
 # Build folder
 build/
+build-clion/
+
 
 # Prerequisites
 *.d
