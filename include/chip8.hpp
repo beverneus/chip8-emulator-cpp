@@ -82,7 +82,7 @@ class Chip8 {
         SDL_Scancode upPrevious;
 
         Chip8();
-        int writeRom(const char path[]);
+        int loadRom(const char path[]);
         void updateTimers();
         void keyEvent(SDL_Scancode key, bool keyDown);
         uint16_t fetch();

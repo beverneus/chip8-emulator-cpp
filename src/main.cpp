@@ -58,7 +58,7 @@ int main(int, char *argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
 
     //ROM
-    chip.writeRom(argv[1]);
+    chip.loadRom(argv[1]);
 
     //DISPLAY
     window = SDL_CreateWindow("Chip-8", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_INPUT_FOCUS);

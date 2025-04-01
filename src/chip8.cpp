@@ -66,7 +66,7 @@ Chip8::Chip8() : upPrevious(SDL_SCANCODE_UNKNOWN) {
     }
 }
 
-int Chip8::writeRom(const char path[]) {
+int Chip8::loadRom(const char path[]) {
     std::ifstream rom(path, std::ios::binary);
     if (rom.fail()) {
         std::cout << "Failed to read rom" << std::endl;
