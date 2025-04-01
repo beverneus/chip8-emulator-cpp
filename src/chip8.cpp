@@ -102,6 +102,7 @@ uint16_t Chip8::fetch() {
 }
 
 void Chip8::decode(const int opcode) {
+    uint8_t VF_temp = 0;
     switch ((opcode & 0xF000) >> 12) {
         case 0x0:
             switch (GET_NN(opcode)) {
@@ -149,44 +150,52 @@ void Chip8::decode(const int opcode) {
                     break;
                 case 0x1:
                     VX |= VY;
+                    VF = 0;
                     break;
                 case 0x2:
                     VX &= VY;
+                    VF = 0;
                     break;
                 case 0x3:
                     VX ^= VY;
+                    VF = 0;
                     break;
                 case 0x4:
                     if (VX > UINT8_MAX - VY) {
-                        VF = 1;
+                        VF_temp = 1;
                     } else {
-                        VF = 0;
+                        VF_temp = 0;
                     }
                     VX += VY;
+                    VF = VF_temp;
                     break;
                 case 0x5:
-                    if (VX > VY) {
-                        VF = 1;
+                    if (VX >= VY) {
+                        VF_temp = 1;
                     } else {
-                        VF = 0;
+                        VF_temp = 0;
                     }
                     VX -= VY;
+                    VF = VF_temp;
                     break;
                 case 0x6:
-                    VF = VX & 0b1;
-                    VX = VX >> 1;
+                    VF_temp = VY & 0b1;
+                    VX = VY >> 1;
+                    VF = VF_temp;
                     break;
                 case 0x7:
-                    if (VY > VX) {
-                        VF = 1;
+                    if (VY >= VX) {
+                        VF_temp = 1;
                     } else {
-                        VF = 0;
+                        VF_temp = 0;
                     }
                     VX = VY - VX;
+                    VF = VF_temp;
                     break;
                 case 0xE:
-                    VF = VX & 0b10000000;
-                    VX = VX << 1;
+                    VF_temp = (VY & 0b10000000) >> 7;
+                    VX = VY << 1;
+                    VF = VF_temp;
                     break;
             }
             break;
@@ -199,7 +208,7 @@ void Chip8::decode(const int opcode) {
             regs.I = GET_NNN(opcode);
             break;
         case 0xB:
-            regs.PC = GET_NNN(opcode) + VX;
+            regs.PC = GET_NNN(opcode) + regs.V[0];
             break;
         case 0xC:
             VX = std::rand() & GET_NN(opcode);
@@ -277,12 +286,12 @@ void Chip8::decode(const int opcode) {
                     break;
                 case 0x55:
                     for (int i = 0; i <= GET_X(opcode); i++) {
-                        memory.write(regs.I + i, regs.V[i]);
+                        memory.write(regs.I++, regs.V[i]);
                     }
                     break;
                 case 0x65:
                     for (int i = 0; i <= GET_X(opcode); i++) {
-                        regs.V[i] = memory.read(regs.I + i);
+                        regs.V[i] = memory.read(regs.I++);
                     }
                     break;
             }
