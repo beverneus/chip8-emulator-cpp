@@ -2,10 +2,7 @@
 #include <math.h>
 #include <SDL3/SDL.h>
 #include <cstdint>
-#include <cstring>
 #include <ctime>
-#include <iostream>
-#include <stack>
 #include <iostream>
 #include <fstream>
 
