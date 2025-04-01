@@ -2,14 +2,14 @@
 #define CHIP8_H
 
 #include <cstdint>
-#include <stack>
-#include <fstream>
-#include <iostream>
 #include <cstring>
+#include <stack>
 #include <SDL3/SDL.h>
 #include <vector>
 #include <utility>
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 
 #include "audio.hpp"
 
