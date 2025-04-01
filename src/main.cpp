@@ -74,6 +74,7 @@ int main(int, char *argv[]) {
 
 bool loop() {
     const Uint64 start = SDL_GetPerformanceCounter();
+    chip.upPrevious = SDL_SCANCODE_UNKNOWN;
     // Event loop
     SDL_Event evt;
     while (SDL_PollEvent(&evt) != 0) {
@@ -85,6 +86,7 @@ bool loop() {
                 break;
             case SDL_EVENT_KEY_UP:
                 chip.keyEvent(evt.key.scancode, false);
+                chip.upPrevious = evt.key.scancode;
                 break;
             default:
                 break;

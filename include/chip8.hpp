@@ -64,6 +64,7 @@ struct KeyMap {
 
     bool contains(SDL_Scancode scancode);
     void set(SDL_Scancode scancode, bool value);
+    int get(SDL_Scancode scancode);
 };
 
 class Chip8 {
@@ -72,8 +73,12 @@ class Chip8 {
     Memory memory;
     KeyMap keyMap;
     std::stack<uint16_t> stack;
+    
 
     public:
+        SDL_Scancode upPrevious;
+
+        Chip8();
         int writeRom(const char path[]);
         void updateTimers();
         void keyEvent(SDL_Scancode key, bool keyDown);
